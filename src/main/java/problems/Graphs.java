@@ -2,7 +2,7 @@ package problems;
 
 import java.util.*;
 
-public class PathExists {
+public class Graphs {
 
     Set<Integer> visited = new HashSet<>();
     Set<Integer> visited_bfs = new HashSet<>();

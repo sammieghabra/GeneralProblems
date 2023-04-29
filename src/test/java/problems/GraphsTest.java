@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PathExistsTest {
+public class GraphsTest {
 
-    PathExists pathExists = new PathExists();
+    Graphs graphs = new Graphs();
 
     @Test
     public void pathExistTestNoCycle() {
@@ -20,8 +20,8 @@ public class PathExistsTest {
         map.put(4, List.of());
         map.put(5, List.of());
 
-        Assert.assertTrue(pathExists.pathExistsDFS(map, 1,5));
-        Assert.assertTrue(pathExists.pathExistsBFS(map, 1,5));
+        Assert.assertTrue(graphs.pathExistsDFS(map, 1,5));
+        Assert.assertTrue(graphs.pathExistsBFS(map, 1,5));
     }
 
     @Test
@@ -33,7 +33,7 @@ public class PathExistsTest {
         map.put(4, List.of(2));
         map.put(5, List.of());
 
-        Assert.assertTrue(pathExists.pathExistsDFS(map, 1,5));
-        Assert.assertTrue(pathExists.pathExistsBFS(map, 1,5));
+        Assert.assertTrue(graphs.pathExistsDFS(map, 1,5));
+        Assert.assertTrue(graphs.pathExistsBFS(map, 1,5));
     }
 }
