@@ -211,4 +211,57 @@ public class GraphsTest {
         // Expected output: true
         Assert.assertTrue(graphs.hasCycleDirectedGraph(graph7));
     }
+
+    @Test
+    public void numberOfConnectedComponentsUndirectedGraph() {
+        // Test case 1
+        Map<Integer, List<Integer>> graph1 = new HashMap<>();
+        graph1.put(0, Arrays.asList(1, 2));
+        graph1.put(1, Arrays.asList(0));
+        graph1.put(2, Arrays.asList(0));
+        graph1.put(3, Arrays.asList(4));
+        graph1.put(4, Arrays.asList(3));
+        Assert.assertEquals(2, graphs.numberOfConnectedComponentsUndirectedGraph(graph1));
+
+        // Test case 2
+        Map<Integer, List<Integer>> graph2 = new HashMap<>();
+        graph2.put(0, Arrays.asList(1, 2));
+        graph2.put(1, Arrays.asList(0));
+        graph2.put(2, Arrays.asList(0));
+        graph2.put(3, Arrays.asList(4, 5));
+        graph2.put(4, Arrays.asList(3));
+        graph2.put(5, Arrays.asList(3));
+        Assert.assertEquals(2, graphs.numberOfConnectedComponentsUndirectedGraph(graph2));
+
+        // Test case 3
+        Map<Integer, List<Integer>> graph3 = new HashMap<>();
+        graph3.put(0, Arrays.asList(1));
+        graph3.put(1, Arrays.asList(0, 2));
+        graph3.put(2, Arrays.asList(1));
+        graph3.put(3, Arrays.asList());
+        graph3.put(4, Arrays.asList(5));
+        graph3.put(5, Arrays.asList(4));
+        Assert.assertEquals(3, graphs.numberOfConnectedComponentsUndirectedGraph(graph3));
+
+        // Test case 4
+        Map<Integer, List<Integer>> graph4 = new HashMap<>();
+        graph4.put(0, Arrays.asList(1));
+        graph4.put(1, Arrays.asList(0, 2));
+        graph4.put(2, Arrays.asList(1));
+        graph4.put(3, Arrays.asList(4, 5));
+        graph4.put(4, Arrays.asList(3, 5));
+        graph4.put(5, Arrays.asList(3, 4));
+        Assert.assertEquals(2, graphs.numberOfConnectedComponentsUndirectedGraph(graph4));
+
+        // Test case 5
+        Map<Integer, List<Integer>> graph5 = new HashMap<>();
+        graph5.put(0, Arrays.asList(1));
+        graph5.put(1, Arrays.asList(0, 2));
+        graph5.put(2, Arrays.asList(1));
+        graph5.put(3, Arrays.asList(4, 5, 6));
+        graph5.put(4, Arrays.asList(3));
+        graph5.put(5, Arrays.asList(3));
+        graph5.put(6, Arrays.asList(3));
+        Assert.assertEquals(2, graphs.numberOfConnectedComponentsUndirectedGraph(graph5));
+    }
 }

@@ -249,4 +249,55 @@ public class Graphs {
 
         return false;
     }
+
+    int numberOfConnectedComponentsUndirectedGraph(Map<Integer, List<Integer>> graph) {
+
+        class StackThing {
+            public int nodeId;
+            public int parent;
+
+            public StackThing(int nodeId, int parent) {
+                this.nodeId = nodeId;
+                this.parent = parent;
+            }
+        }
+
+        Stack<StackThing> stack = new Stack<>();
+
+        Set<Integer> visited4 = new HashSet<>();
+        Set<Integer> keys = new HashSet<>(graph.keySet());
+
+        int result = 0;
+
+        while (!keys.isEmpty()) {
+
+            Integer keyToInspect = keys.iterator().next();
+            result++;
+
+            stack.push(new StackThing(keyToInspect, -1));
+
+            while (!stack.isEmpty()) {
+                StackThing stackThing = stack.pop();
+
+                Integer poppedKey = stackThing.nodeId;
+
+                keys.remove(poppedKey);
+
+                if (!visited4.contains(poppedKey)) {
+                    List<Integer> connections = graph.getOrDefault(poppedKey, List.of());
+
+                    for (Integer connection : connections) {
+                        if (connection != stackThing.parent) {
+                            stack.push(new StackThing(connection, poppedKey));
+                        }
+                    }
+
+                    visited4.add(poppedKey);
+                }
+            }
+
+        }
+
+        return result;
+    }
 }
