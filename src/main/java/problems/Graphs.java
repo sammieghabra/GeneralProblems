@@ -300,4 +300,68 @@ public class Graphs {
 
         return result;
     }
+
+    /**
+     * Problem: Given a directed graph, check if it's a tree.
+     *
+     * A directed graph is called a tree if it has the following properties:
+     *
+     * 1. There is only one root node (a node with no incoming edges).
+     * 2. All nodes except the root node have exactly one incoming edge.
+     * 3. There is only one unique path from the root to every other node.
+     *
+     * @param graph
+     * @return
+     */
+    public boolean isTree(Map<Integer, List<Integer>> graph) {
+
+        class StackThing {
+            public int parent;
+            public int nodeId;
+
+            public StackThing(int parent, int nodeId) {
+                this.nodeId = nodeId;
+                this.parent = parent;
+            }
+        }
+
+        Set<Integer> keys = new HashSet<>(graph.keySet());
+        Set<Integer> visited5 = new HashSet<>();
+
+        if (graph.size() == 1 || graph.size() == 0) {
+            return true;
+        }
+
+        Stack<Integer> stack = new Stack<>();
+
+        while (!keys.isEmpty()) {
+            Integer key = keys.iterator().next();
+
+            //stack.push(new StackThing(-1, key));
+            stack.push(key);
+
+            while (!stack.isEmpty()) {
+                //StackThing stackThing = stack.pop();
+                //Integer keyToInspect = stackThing.nodeId;
+                Integer keyToInspect = stack.pop();
+
+                List<Integer> connections = graph.getOrDefault(keyToInspect, List.of());
+
+                for (Integer connection: connections) {
+                    if (visited5.contains(connection)) {
+                        return false;
+                    }
+
+                    visited5.add(connection);
+                    //stack.push(new StackThing(keyToInspect, connection));
+                    stack.push(connection);
+                }
+
+                keys.remove(keyToInspect);
+            }
+
+        }
+
+        return Math.abs(visited5.size()-graph.keySet().size()) == 1;
+    }
 }

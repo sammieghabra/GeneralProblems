@@ -3,10 +3,7 @@ package problems;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GraphsTest {
 
@@ -263,5 +260,102 @@ public class GraphsTest {
         graph5.put(5, Arrays.asList(3));
         graph5.put(6, Arrays.asList(3));
         Assert.assertEquals(2, graphs.numberOfConnectedComponentsUndirectedGraph(graph5));
+    }
+
+    @Test
+    public void isTreeDirectedGraph() {
+        Map<Integer, List<Integer>> graph1 = new HashMap<>();
+        graph1.put(0, Arrays.asList(1, 2));
+        graph1.put(1, Arrays.asList(3));
+        graph1.put(2, Arrays.asList());
+        graph1.put(3, Arrays.asList());
+        Assert.assertEquals(true, graphs.isTree(graph1));
+
+        Map<Integer, List<Integer>> graph2 = new HashMap<>();
+        graph2.put(0, Arrays.asList(1));
+        graph2.put(1, Arrays.asList(2));
+        graph2.put(2, Arrays.asList(3));
+        graph2.put(3, Arrays.asList());
+        Assert.assertEquals(true, graphs.isTree(graph2));
+
+        Map<Integer, List<Integer>> graph3 = new HashMap<>();
+        graph3.put(0, Arrays.asList(1, 2));
+        graph3.put(1, Arrays.asList(2));
+        graph3.put(2, Arrays.asList());
+        Assert.assertEquals(false, graphs.isTree(graph3));
+
+        Map<Integer, List<Integer>> graph4 = new HashMap<>();
+        graph4.put(0, Arrays.asList(1));
+        graph4.put(1, Arrays.asList(2));
+        graph4.put(2, Arrays.asList(0));
+        Assert.assertEquals(false, graphs.isTree(graph4));
+
+        Map<Integer, List<Integer>> graph5 = new HashMap<>();
+        graph5.put(0, Arrays.asList(1, 2));
+        graph5.put(1, Arrays.asList(3, 4));
+        graph5.put(2, Arrays.asList(5, 6));
+        graph5.put(3, Arrays.asList());
+        graph5.put(4, Arrays.asList());
+        graph5.put(5, Arrays.asList());
+        graph5.put(6, Arrays.asList());
+        Assert.assertEquals(true, graphs.isTree(graph5));
+
+        Map<Integer, List<Integer>> flawedGraph = new HashMap<>();
+        flawedGraph.put(0, Arrays.asList(1, 2));
+        flawedGraph.put(1, Arrays.asList());
+        flawedGraph.put(2, Arrays.asList(3));
+        flawedGraph.put(3, Arrays.asList());
+        Assert.assertEquals(true, graphs.isTree(flawedGraph));
+
+        Map<Integer, List<Integer>> example1 = new HashMap<>();
+        example1.put(0, Arrays.asList(1));
+        example1.put(1, Arrays.asList(0, 2));
+        example1.put(2, Arrays.asList(1, 3));
+        example1.put(3, Arrays.asList(2, 4));
+        example1.put(4, Arrays.asList(3, 0));
+        Assert.assertEquals(false, graphs.isTree(example1));
+
+        Map<Integer, List<Integer>> example2 = new HashMap<>();
+        example2.put(0, Arrays.asList(1));
+        example2.put(1, Arrays.asList(0));
+        example2.put(2, Arrays.asList(3));
+        example2.put(3, Arrays.asList(2));
+        Assert.assertEquals(false, graphs.isTree(example2));
+
+        Map<Integer, List<Integer>> example3 = new HashMap<>();
+        example3.put(0, Arrays.asList(1, 2));
+        example3.put(1, Arrays.asList(0, 3));
+        example3.put(2, Arrays.asList(0, 3));
+        example3.put(3, Arrays.asList(1, 2, 4));
+        example3.put(4, Arrays.asList(3));
+        Assert.assertEquals(false, graphs.isTree(example3));
+
+        Map<Integer, List<Integer>> example4 = new HashMap<>();
+        example4.put(0, new ArrayList<>());
+        Assert.assertEquals(true, graphs.isTree(example4));
+
+        Map<Integer, List<Integer>> example5 = new HashMap<>();
+        example5.put(0, Arrays.asList(1, 2, 3));
+        example5.put(1, Arrays.asList(4, 5));
+        example5.put(2, Arrays.asList());
+        example5.put(3, Arrays.asList(6));
+        example5.put(4, Arrays.asList());
+        example5.put(5, Arrays.asList());
+        example5.put(6, Arrays.asList());
+        Assert.assertEquals(true, graphs.isTree(example5));
+
+        Map<Integer, List<Integer>> graph8 = new HashMap<>();
+        graph8.put(1, Arrays.asList(2));
+        graph8.put(2, Arrays.asList(3));
+        graph8.put(3, Arrays.asList(4));
+        graph8.put(4, Arrays.asList(1));
+        Assert.assertEquals(false, graphs.isTree(graph8));
+
+        Map<Integer, List<Integer>> graph9 = new HashMap<>();
+        graph9.put(1, Arrays.asList(2));
+        graph9.put(2, Arrays.asList());
+        graph9.put(3, Arrays.asList(4));
+        graph9.put(4, Arrays.asList());
+        Assert.assertEquals(false, graphs.isTree(graph9));
     }
 }
