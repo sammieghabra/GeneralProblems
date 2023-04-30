@@ -218,4 +218,35 @@ public class Graphs {
 
         return false;
     }
+
+    public boolean hasCycleDirectedGraph(Map<Integer, List<Integer>> graph) {
+
+        Set<Integer> keys = new HashSet<>(graph.keySet());
+        Stack<Integer> stack = new Stack<>();
+        Set<Integer> visited_3 = new HashSet<>();
+
+        while (!keys.isEmpty()) {
+            Integer key = keys.iterator().next();
+            stack.push(key);
+
+            while (!stack.isEmpty()) {
+                Integer keyToInspect = stack.pop();
+                if (visited_3.contains(keyToInspect)) {
+                    return true;
+                } else {
+                    visited_3.add(keyToInspect);
+                }
+
+                List<Integer> connections = graph.getOrDefault(keyToInspect, List.of());
+
+                for (Integer connection: connections) {
+                    stack.push(connection);
+                }
+
+                keys.remove(keyToInspect);
+            }
+        }
+
+        return false;
+    }
 }
