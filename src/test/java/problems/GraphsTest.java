@@ -92,4 +92,67 @@ public class GraphsTest {
         int target3 = 6;
         Assert.assertEquals(3, graphs.shortestPathLength(graph3, source3, target3));
     }
+
+    @Test
+    public void testHasCycleUndirectedGraph() {
+        Map<Integer, List<Integer>> graph1 = new HashMap<>();
+        graph1.put(0, Arrays.asList(1, 2));
+        graph1.put(1, Arrays.asList(0, 2));
+        graph1.put(2, Arrays.asList(0, 1, 3));
+        graph1.put(3, Arrays.asList(2));
+        Assert.assertTrue(graphs.hasCycleUndirectedGraph(graph1));
+    }
+
+    @Test
+    public void testNoCycleUndirectedGraph() {
+        Map<Integer, List<Integer>> graph2 = new HashMap<>();
+        graph2.put(0, Arrays.asList(1));
+        graph2.put(1, Arrays.asList(0));
+        graph2.put(2, Arrays.asList(3));
+        graph2.put(3, Arrays.asList(2));
+        Assert.assertFalse(graphs.hasCycleUndirectedGraph(graph2));
+    }
+
+    @Test
+    public void anotherCycleUndirected() {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        graph.put(1, Arrays.asList(2));
+        graph.put(2, Arrays.asList(3));
+        graph.put(3, Arrays.asList(1));
+        graph.remove(1);
+        Assert.assertFalse(graphs.hasCycleUndirectedGraph(graph));
+
+        Map<Integer, List<Integer>> graph1 = new HashMap<>();
+        graph1.put(1, Arrays.asList(2, 3));
+        graph1.put(2, Arrays.asList(1, 3));
+        graph1.put(3, Arrays.asList(1, 2));
+        Assert.assertTrue(graphs.hasCycleUndirectedGraph(graph1));
+
+        Map<Integer, List<Integer>> graph2 = new HashMap<>();
+        graph2.put(1, Arrays.asList(2, 3));
+        graph2.put(2, Arrays.asList(1, 4));
+        graph2.put(3, Arrays.asList(1));
+        graph2.put(4, Arrays.asList(2));
+        Assert.assertFalse(graphs.hasCycleUndirectedGraph(graph2));
+
+        Map<Integer, List<Integer>> graph3 = new HashMap<>();
+        graph3.put(1, Arrays.asList(2));
+        graph3.put(2, Arrays.asList(1, 3, 4));
+        graph3.put(3, Arrays.asList(2, 4));
+        graph3.put(4, Arrays.asList(2, 3));
+        Assert.assertTrue(graphs.hasCycleUndirectedGraph(graph3));
+
+        Map<Integer, List<Integer>> graph4 = new HashMap<>();
+        graph4.put(1, Arrays.asList(2));
+        graph4.put(2, Arrays.asList(1, 3));
+        graph4.put(3, Arrays.asList(2));
+        Assert.assertFalse(graphs.hasCycleUndirectedGraph(graph4));
+
+        Map<Integer, List<Integer>> graph5 = new HashMap<>();
+        graph5.put(1, Arrays.asList(2, 4));
+        graph5.put(2, Arrays.asList(1, 3, 4));
+        graph5.put(3, Arrays.asList(2));
+        graph5.put(4, Arrays.asList(1, 2));
+        Assert.assertTrue(graphs.hasCycleUndirectedGraph(graph5));
+    }
 }

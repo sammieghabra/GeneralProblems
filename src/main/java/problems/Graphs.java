@@ -1,7 +1,5 @@
 package problems;
 
-import java.awt.image.AreaAveragingScaleFilter;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Graphs {
@@ -48,8 +46,6 @@ public class Graphs {
 
         while (!queue.isEmpty()) {
             temp = queue.poll();
-
-            System.out.println(temp);
 
             if (temp == end) {
                 return true;
@@ -165,5 +161,61 @@ public class Graphs {
         }
 
         return distances.get(target) == Integer.MAX_VALUE ? -1 : distances.get(target);
+    }
+
+    /**
+     * Problem: Detect cycle in an undirected graph
+     *
+     * Given an undirected graph represented as an adjacency list, determine if the graph contains a cycle.
+     * @param graph
+     * @return
+     */
+    public boolean hasCycleUndirectedGraph(Map<Integer, List<Integer>> graph) {
+
+        class StackThing {
+            public Integer nodeId;
+            public Integer parent;
+
+            public StackThing(int nodeId, int parent) {
+                this.nodeId = nodeId;
+                this.parent = parent;
+            }
+        }
+
+        Set<Integer> visited_un = new HashSet<>();
+        Stack<StackThing> stack = new Stack<>();
+
+        Set<Integer> keys = new HashSet<>(graph.keySet());
+
+        while (!keys.isEmpty()) {
+
+            Integer key = keys.iterator().next();
+
+            stack.push(new StackThing(key, -1));
+
+            while (!stack.isEmpty()) {
+
+                StackThing stackThing = stack.pop();
+                Integer keyToInspect = stackThing.nodeId;
+
+                keys.remove(keyToInspect);
+
+                if (visited_un.contains(keyToInspect)) {
+                    return true;
+                }
+
+                List<Integer> connections = graph.getOrDefault(keyToInspect, List.of());
+
+                for (Integer connection: connections) {
+                    if (stackThing.parent != connection) {
+                        stack.push(new StackThing(connection, keyToInspect));
+                    }
+                }
+
+                visited_un.add(keyToInspect);
+            }
+        }
+
+        return false;
     }
 }
