@@ -1,5 +1,7 @@
 package problems;
 
+import java.awt.image.AreaAveragingScaleFilter;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Graphs {
@@ -67,5 +69,101 @@ public class Graphs {
         }
 
         return temp == end;
+    }
+
+    public Integer shortestPathDijkstra(Map<Integer, Map<Integer, Integer>> graph, int source, int target) {
+
+        Map<Integer, Integer> distances = new HashMap<>();
+        Set<Integer> visitedSet = new HashSet<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt(distances::get));
+
+        // Well, we need a shortest distance map. Why? we need to keep track of all the distances from the source
+        // to each node. Why? Well I guess we could then just look up that key with the taget at the end? It will
+        // keep track of the best paths so far.
+        distances.put(source, 0);
+
+        graph.keySet().forEach(node -> {
+            if (node != source) {
+                distances.put(node, Integer.MAX_VALUE);
+            }
+        });
+
+        pq.offer(source);
+
+        while (!pq.isEmpty()) {
+            int currentNode = pq.poll();
+
+            if (currentNode == target) {
+                break;
+            }
+
+            if (visitedSet.contains(currentNode)) {
+                continue;
+            }
+
+            visitedSet.add(currentNode);
+            Map<Integer, Integer> currentDistance = graph.get(currentNode);
+
+            for (Map.Entry<Integer, Integer> entry : currentDistance.entrySet()) {
+                int nodeId = entry.getKey();
+                int distanceFromNode = entry.getValue();
+                int currentShortestDistance = distances.get(nodeId);
+
+                if (!visitedSet.contains(nodeId)
+                        && currentShortestDistance > distances.get(currentNode) + distanceFromNode) {
+                    distances.put(nodeId, distances.get(currentNode) + distanceFromNode);
+                    pq.offer(nodeId);
+                }
+            }
+        }
+
+        return distances.get(target);
+    }
+
+    public int shortestPathLength(Map<Integer, List<Integer>> graph, int source, int target) {
+
+        Map<Integer, Integer> distances = new HashMap<>();
+
+        class Levels {
+            public int nodeId;
+            public int distance;
+
+            public Levels(int nodeId, int distance) {
+                this.nodeId = nodeId;
+                this.distance = distance;
+            }
+        }
+
+        graph.forEach((key, value) -> {
+            distances.put(key, Integer.MAX_VALUE);
+        });
+
+        Set<Integer> vis = new HashSet<>();
+
+        ArrayDeque<Levels> arrayDeque = new ArrayDeque();
+        arrayDeque.offer(new Levels(source, 0));
+
+        while (!arrayDeque.isEmpty()) {
+            Levels temp = arrayDeque.poll();
+
+            List<Integer> connections = graph.get(temp.nodeId);
+
+            for (Integer nodeId: connections) {
+
+                if (!vis.contains(nodeId)) {
+                    Integer currentDistance = temp.distance + 1;
+                    Integer shortestSeen = distances.get(nodeId);
+
+                    if (shortestSeen > currentDistance) {
+                        distances.put(nodeId, currentDistance);
+                    }
+                    arrayDeque.push(new Levels(nodeId, temp.distance + 1));
+                }
+            }
+
+            vis.add(temp.nodeId);
+        }
+
+        return distances.get(target) == Integer.MAX_VALUE ? -1 : distances.get(target);
     }
 }
