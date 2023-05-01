@@ -1,5 +1,6 @@
 package problems;
 
+import model.DirectedEdge;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -357,5 +358,49 @@ public class GraphsTest {
         graph9.put(3, Arrays.asList(4));
         graph9.put(4, Arrays.asList());
         Assert.assertEquals(false, graphs.isTree(graph9));
+    }
+
+    @Test
+    public void testFindLongestPathInDAG() {
+        List<DirectedEdge> edges = Arrays.asList(
+                new DirectedEdge(0, 1, 5),
+                new DirectedEdge(0, 2, 3),
+                new DirectedEdge(1, 3, 6),
+                new DirectedEdge(1, 2, 2),
+                new DirectedEdge(2, 4, 4),
+                new DirectedEdge(2, 5, 2),
+                new DirectedEdge(2, 3, 7),
+                new DirectedEdge(3, 5, 1),
+                new DirectedEdge(3, 4, -1),
+                new DirectedEdge(4, 5, -2)
+        );
+        int numberOfVertices = 6;
+        Assert.assertEquals(6, graphs.findLongestPathInDAG(edges, numberOfVertices));
+
+        List<DirectedEdge> edges1 = Arrays.asList(
+                new DirectedEdge(0, 1, 3),
+                new DirectedEdge(0, 2, 2),
+                new DirectedEdge(1, 3, 4),
+                new DirectedEdge(1, 4, 1),
+                new DirectedEdge(2, 3, 2),
+                new DirectedEdge(2, 4, 3),
+                new DirectedEdge(3, 5, 6),
+                new DirectedEdge(4, 5, 5)
+        );
+        int numberOfVertices1 = 6;
+        List<Integer> result1 = Arrays.asList(0, 1, 3, 5);
+
+        Assert.assertEquals(result1.size(), graphs.findLongestPathInDAG(edges1, numberOfVertices1));
+
+        List<DirectedEdge> edges2 = Arrays.asList(
+                new DirectedEdge(0, 1, 1),
+                new DirectedEdge(0, 2, 1),
+                new DirectedEdge(1, 3, 1),
+                new DirectedEdge(2, 3, 1),
+                new DirectedEdge(3, 4, 1)
+        );
+        int numberOfVertices2 = 5;
+        List<Integer> result2 = Arrays.asList(0, 1, 3, 4);
+        Assert.assertEquals(result2.size(), graphs.findLongestPathInDAG(edges2, numberOfVertices2));
     }
 }

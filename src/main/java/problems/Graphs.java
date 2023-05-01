@@ -1,6 +1,9 @@
 package problems;
 
+import model.DirectedEdge;
+
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class Graphs {
 
@@ -363,5 +366,91 @@ public class Graphs {
         }
 
         return Math.abs(visited5.size()-graph.keySet().size()) == 1;
+    }
+
+    public int findLongestPathInDAG(List<DirectedEdge> edges, int numberOfVertices) {
+        List<Integer> result = new ArrayList<>();
+
+        Map<Integer, List<DirectedEdge>> graph = new HashMap<>();
+
+        Set<Integer> rootNodes = new HashSet<>();
+
+        for (int i = 0; i < numberOfVertices; ++i) {
+            rootNodes.add(i);
+        }
+
+        for (DirectedEdge edge: edges) {
+            if (graph.containsKey(edge.source)) {
+                List<DirectedEdge> fd = new ArrayList<>(graph.get(edge.source));
+                fd.add(edge);
+                graph.put(edge.source, fd);
+            } else {
+                List<DirectedEdge> put = new ArrayList<>();
+                put.add(edge);
+                graph.put(edge.source, put);
+            }
+
+            if (rootNodes.contains(edge.destination)) {
+                rootNodes.remove(edge.destination);
+            }
+        }
+
+        class DirectedEdgeWithAcc {
+            public DirectedEdge directedEdge;
+            public int weight;
+
+            public List<Integer> path;
+
+            public DirectedEdgeWithAcc(DirectedEdge directedEdge, int weight, List<Integer> path) {
+                this.directedEdge = directedEdge;
+                this.weight = weight;
+                this.path = path;
+            }
+        }
+
+        Stack<DirectedEdgeWithAcc> stack = new Stack<>();
+
+        while (!rootNodes.isEmpty()) {
+            Integer sc = rootNodes.iterator().next();
+            List<DirectedEdge> edgeList = graph.getOrDefault(sc, new ArrayList<>());
+
+            edgeList.forEach(edge -> {
+                LinkedList linkedList = new LinkedList();
+                linkedList.add(edge.source);
+                stack.push(new DirectedEdgeWithAcc(edge, 0, linkedList));
+            });
+
+            while (!stack.isEmpty()) {
+                DirectedEdgeWithAcc popped = stack.pop();
+                DirectedEdge edge = popped.directedEdge;
+
+                if (result.size() < popped.path.size()) {
+                    result = popped.path;
+                }
+
+                if (edge == null) {
+                    continue;
+                }
+
+                List<DirectedEdge> connections = graph.getOrDefault(edge.destination, new ArrayList<>());
+
+                if (connections.isEmpty()) {
+                    LinkedList linkedList = new LinkedList(popped.path);
+                    linkedList.add(edge.destination);
+                    stack.push(new DirectedEdgeWithAcc(null, popped.weight + edge.weight, linkedList));
+                }
+
+                connections.forEach(con -> {
+                    LinkedList linkedList = new LinkedList(popped.path);
+                    linkedList.add(con.source);
+
+                    stack.push(new DirectedEdgeWithAcc(con, popped.weight + edge.weight, linkedList));
+                });
+            }
+
+            rootNodes.remove(sc);
+        }
+
+        return result.size();
     }
 }
