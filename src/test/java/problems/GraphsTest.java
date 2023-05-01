@@ -403,4 +403,115 @@ public class GraphsTest {
         List<Integer> result2 = Arrays.asList(0, 1, 3, 4);
         Assert.assertEquals(result2.size(), graphs.findLongestPathInDAG(edges2, numberOfVertices2));
     }
+
+    @Test
+    public void testFindShortestDistance() {
+        List<DirectedEdge> edges = Arrays.asList(
+                new DirectedEdge(0, 1, 10),
+                new DirectedEdge(0, 2, 5),
+                new DirectedEdge(1, 3, 1),
+                new DirectedEdge(1, 2, 2),
+                new DirectedEdge(2, 1, 3),
+                new DirectedEdge(2, 3, 9),
+                new DirectedEdge(2, 4, 2),
+                new DirectedEdge(3, 4, 4),
+                new DirectedEdge(3, 0, 7),
+                new DirectedEdge(4, 3, 6)
+        );
+        int numberOfVertices = 5;
+        int source = 0;
+        int destination = 4;
+        Assert.assertEquals(7, graphs.findShortestDistance(edges, numberOfVertices, source, destination));
+
+        List<DirectedEdge> edges1 = Arrays.asList(
+                new DirectedEdge(0, 1, 4),
+                new DirectedEdge(0, 2, 2),
+                new DirectedEdge(1, 2, 5),
+                new DirectedEdge(1, 3, 10),
+                new DirectedEdge(2, 4, 3),
+                new DirectedEdge(3, 5, 5),
+                new DirectedEdge(4, 3, 4),
+                new DirectedEdge(4, 5, 6)
+        );
+        int numberOfVertices1 = 6;
+        int source1 = 0;
+        int destination1 = 5;
+        Assert.assertEquals(11, graphs.findShortestDistance(edges1, numberOfVertices1, source1, destination1));
+
+        List<DirectedEdge> edges2 = Arrays.asList(
+                new DirectedEdge(0, 1, 3),
+                new DirectedEdge(0, 2, 6),
+                new DirectedEdge(1, 2, 4),
+                new DirectedEdge(1, 3, 4),
+                new DirectedEdge(1, 4, 11),
+                new DirectedEdge(2, 3, 8),
+                new DirectedEdge(2, 6, 11),
+                new DirectedEdge(3, 4, -4),
+                new DirectedEdge(3, 5, 5),
+                new DirectedEdge(3, 6, 2),
+                new DirectedEdge(4, 7, 9),
+                new DirectedEdge(5, 7, 1),
+                new DirectedEdge(6, 7, 2)
+        );
+        int numberOfVertices2 = 8;
+        int source2 = 0;
+        int destination2 = 7;
+        Assert.assertEquals(11, graphs.findShortestDistance(edges2, numberOfVertices2, source2, destination2));
+    }
+
+    @Test
+    public void testWithNegative() {
+        List<DirectedEdge> edges = Arrays.asList(
+                new DirectedEdge(0, 1, 1),
+                new DirectedEdge(1, 2, 2),
+                new DirectedEdge(2, 3, 3),
+                new DirectedEdge(3, 1, -7)
+        );
+        int numberOfVertices = 4;
+        int source = 0;
+        int destination = 2;
+        Assert.assertEquals(1, graphs.findShortestDistance(edges, numberOfVertices, source, destination));
+
+        List<DirectedEdge> edges1 = Arrays.asList(
+                new DirectedEdge(0, 1, 4),
+                new DirectedEdge(0, 2, 2),
+                new DirectedEdge(1, 2, 1),
+                new DirectedEdge(1, 3, 5),
+                new DirectedEdge(2, 3, -3),
+                new DirectedEdge(2, 4, 3),
+                new DirectedEdge(3, 5, 2),
+                new DirectedEdge(4, 5, -5)
+        );
+        int numberOfVertices1 = 6;
+        int source1 = 0;
+        int destination1 = 5;
+        Assert.assertEquals(-2, graphs.findShortestDistance(edges1, numberOfVertices1, source1, destination1));
+
+
+        List<DirectedEdge> edges2 = Arrays.asList(
+                new DirectedEdge(0, 1, 2),
+                new DirectedEdge(1, 2, 3),
+                new DirectedEdge(1, 3, 4),
+                new DirectedEdge(2, 4, -4),
+                new DirectedEdge(2, 5, 5),
+                new DirectedEdge(3, 5, 1),
+                new DirectedEdge(4, 5, -1)
+        );
+        int numberOfVertices2 = 6;
+        int source2 = 0;
+        int destination2 = 5;
+        Assert.assertEquals(0, graphs.findShortestDistance(edges2, numberOfVertices2, source2, destination2));
+        List<DirectedEdge> edges3 = Arrays.asList(
+                new DirectedEdge(0, 1, 2),
+                new DirectedEdge(0, 2, 4),
+                new DirectedEdge(1, 2, 1),
+                new DirectedEdge(1, 3, 3),
+                new DirectedEdge(2, 3, -6),
+                new DirectedEdge(3, 4, 1)
+        );
+        int numberOfVertices3 = 5;
+        int source3 = 0;
+        int destination3 = 4;
+        Assert.assertEquals(-1, graphs.findShortestDistance(edges3, numberOfVertices3, source3, destination3));
+    }
 }

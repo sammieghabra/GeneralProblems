@@ -453,4 +453,96 @@ public class Graphs {
 
         return result.size();
     }
+
+    public int findShortestDistance(List<DirectedEdge> edges, int numberOfVertices, int source, int destination) {
+        Map<Integer, List<DirectedEdge>> graph = new HashMap<>();
+        Map<String, Integer> pathToWeight = new HashMap<>();
+
+        if (source == destination) {
+            return 0;
+        }
+
+        for (DirectedEdge edge: edges) {
+            if (graph.containsKey(edge.source)) {
+                List<DirectedEdge> fd = new ArrayList<>(graph.get(edge.source));
+                fd.add(edge);
+                graph.put(edge.source, fd);
+            } else {
+                List<DirectedEdge> put = new ArrayList<>();
+                put.add(edge);
+                graph.put(edge.source, put);
+            }
+        }
+
+        class DirectedEdgeWithAcc {
+            public DirectedEdge directedEdge;
+            public int weight;
+
+            int previous;
+
+            public LinkedList<Integer> path;
+
+            public DirectedEdgeWithAcc(DirectedEdge directedEdge, int weight, LinkedList<Integer> path, int previous) {
+                this.directedEdge = directedEdge;
+                this.weight = weight;
+                this.path = path;
+                this.previous = previous;
+            }
+        }
+
+        Stack<DirectedEdgeWithAcc> stack = new Stack<>();
+
+        Integer shortestDistance = Integer.MAX_VALUE;
+        List<Integer> result = new ArrayList<>();
+        List<DirectedEdge> edgeList = graph.getOrDefault(source, new ArrayList<>());
+
+        edgeList.forEach(edge -> {
+            LinkedList linkedList = new LinkedList();
+            linkedList.add(edge.source);
+            stack.push(new DirectedEdgeWithAcc(edge, 0, linkedList, -1));
+        });
+
+        while (!stack.isEmpty()) {
+            DirectedEdgeWithAcc popped = stack.pop();
+            DirectedEdge edge = popped.directedEdge;
+
+            if (popped.path.getLast().equals(destination) && shortestDistance > popped.weight) {
+                shortestDistance = popped.weight;
+                result = new ArrayList<>(popped.path);
+            }
+
+            if (edge == null) {
+                continue;
+            }
+
+            String key = edge.source + "-" + edge.destination;
+
+            if (!pathToWeight.containsKey(key) || pathToWeight.get(key) > edge.weight + popped.weight) {
+                pathToWeight.put(key, edge.weight + popped.weight);
+
+                List<DirectedEdge> connections = graph.getOrDefault(edge.destination, new ArrayList<>());
+
+                if (connections.isEmpty()) {
+                    LinkedList linkedList = new LinkedList(popped.path);
+                    linkedList.add(edge.destination);
+                    stack.push(new DirectedEdgeWithAcc(null, popped.weight + edge.weight,
+                            linkedList, edge.source));
+                }
+
+                connections.forEach(con -> {
+                    LinkedList linkedList = new LinkedList(popped.path);
+                    linkedList.add(con.source);
+
+                    stack.push(new DirectedEdgeWithAcc(con, popped.weight + edge.weight,
+                            linkedList, edge.source));
+                });
+            }
+        }
+
+        if (shortestDistance.equals(Integer.MAX_VALUE)) {
+            return -1;
+        }
+
+        return shortestDistance;
+    }
 }
